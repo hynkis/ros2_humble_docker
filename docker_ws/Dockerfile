@@ -79,6 +79,12 @@ RUN mkdir -p /root/.config/terminator/
 # Install ROS libraries
 RUN apt-get update && apt-get install -y ros-humble-ackermann-msgs ros-humble-tf2-msgs ros-humble-tf2 ros-humble-pcl-ros ros-humble-perception-pcl ros-humble-perception ros-humble-pcl-msgs ros-humble-pcl-conversions libgoogle-glog-dev
 
+# Add user
+# ref: https://stackoverflow.com/questions/28966198/dockerfile-home-is-not-working-with-add-copy-instructions
+RUN useradd -m usrg
+USER usrg
+
+
 # Configure ROS
 #RUN rosdep init && rosdep update 
 RUN rosdep update 
@@ -87,19 +93,7 @@ RUN echo "export ROSLAUNCH_SSH_UNKNOWN=1" >> $HOME/.bashrc
 RUN echo "source /opt/ros/humble/setup.zsh" >> $HOME/.zshrc
 RUN echo "export ROSLAUNCH_SSH_UNKNOWN=1" >> $HOME/.zshrc
 
-# Add user
-# ref: https://effectivesquid.tistory.com/entry/Docker-Container%EB%A5%BC-root%EA%B0%80-%EC%95%84%EB%8B%8C-%EC%9D%BC%EB%B0%98-%EC%9C%A0%EC%A0%80%EB%A1%9C-%EC%8B%A4%ED%96%89%EC%8B%9C%ED%82%A4%EB%8A%94-%EB%B2%95
-#ARG user_id
-#ARG user_name
-#ENV USERID ${user_id}
-#ENV USERNAME ${user_name}
-#RUN useradd -ms /bin/bash -r -u $USERID $USERNAME \
-# && echo "$USERNAME:$USERNAME" | chpasswd
-
-#USER $USERNAME
-
 # configuration for ROS as USER
-RUN echo "source /opt/ros/humble/setup.bash" >> $HOME/.bashrc
 RUN echo "source $HOME/ros2_humble_docker/install/setup.bash" >> $HOME/.bashrc
 RUN echo "export ROSLAUNCH_SSH_UNKNOWN=1" >> $HOME/.bashrc
 RUN echo "alias cb='cd ~/ros2_humble_docker && colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release'" >> $HOME/.bashrc
