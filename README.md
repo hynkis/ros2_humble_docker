@@ -7,6 +7,10 @@ Dockerfile for ROS2 Humble. The followings are considered:
   - shared directory option
 
 ## Installation
+1. please change the following user name for your PC (here, usrg)
+https://github.com/hynkis/ros2_humble_docker/blob/032b766078368326dff918bfa89e504a256b413b/docker_ws/Dockerfile#L85
+
+3. build docker file
 ```
 cd ~
 git clone https://github.com/hynkis/ros2_humble_docker.git
@@ -21,7 +25,7 @@ docker run --rm -it --privileged \
 --ipc=host \
 --device=/dev/dri:/dev/dri \
 -v /tmp/.X11-unix:/tmp/.X11-unix \
--v /home/usrg/.ros:/home/usrg/.ros \
+-v $HOME/.ros:$HOME/.ros \
 -v $HOME/.Xauthority:/home/$(id -un)/.Xauthority \
 -e DISPLAY=$DISPLAY \
 -e XAUTHORITY=/home/$(id -un)/.Xauthority \
@@ -29,5 +33,7 @@ docker run --rm -it --privileged \
 -v /etc/passwd:/etc/passwd:ro \
 -v /etc/group:/etc/group:ro \
 -v $HOME/ros2_humble_docker:$HOME/ros2_humble_docker \
--e ROS_IP=127.0.0.1 osrf/ros-humble-user:latest
+-v $HOME/.Xauthority:$HOME/.Xauthority \
+-e ROS_IP=127.0.0.1 \
+osrf/ros-humble-user:latest
 ```
